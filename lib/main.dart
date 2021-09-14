@@ -31,8 +31,35 @@ class _RandomWordsState extends State<RandomWords> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Super cool infinite random word list'),
+        actions: [
+          IconButton(onPressed: _pushSaved, icon: Icon(Icons.list)),
+        ],
       ),
       body: _buildSuggestion(),
+    );
+  }
+
+  void _pushSaved() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (BuildContext context) {
+            final tiles = _saved.map((WordPair pair) => ListTile(
+              title: Text(
+                pair.asPascalCase,
+                style: _biggerFont,
+              ),
+            ));
+            final divided = tiles.isNotEmpty ?
+            ListTile.divideTiles(tiles: tiles, context: context).toList() :
+            <Widget>[];
+            return Scaffold(
+              appBar: AppBar(
+                title: Text('Saved Words'),
+              ),
+              body: ListView(children: divided),
+            );
+          }
+      )
     );
   }
 
